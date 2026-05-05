@@ -56,7 +56,7 @@
 <body>
 <div class="topbar">
   <div class="brand">Presentismo <span>/ KZero</span></div>
-  <div class="updated">Actualizado: 05/05/2026 14:56</div>
+  <div class="updated">Actualizado: 05/05/2026 14:59</div>
 </div>
 <div class="metrics">
   <div class="metric"><div class="metric-label">Dotaci&oacute;n</div><div class="metric-value b" id="m-dot">-</div></div>
@@ -169,7 +169,9 @@ function render() {
       for (var f=0; f<FECHAS_VISIBLES.length; f++) {
         var fecha = FECHAS_VISIBLES[f];
         if (fecha in row.aus) {
-          html += '<td class="day-cell"><span class="dot-aus">&#10007;</span></td>';
+          var coment = row.aus[fecha].c || "";
+          var tip = coment ? " title=\"" + coment + "\"" : "";
+          html += "<td class=\"day-cell\"><span class=\"dot-aus\"" + tip + ">&#10007;</span></td>";
         } else {
           html += '<td class="day-cell"><span class="dot-ok">&#10003;</span></td>';
         }
