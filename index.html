@@ -52,18 +52,8 @@
   .filter-label { font-size: 12px; color: var(--muted); }
 
   .table-wrap { padding: 0 24px 40px; overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); font-size: 13px; }
+  table { width: 100%; table-layout: fixed; border-collapse: collapse; background: var(--surface); border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); font-size: 13px; }
   
-  table { table-layout: fixed; }
-  col.c-name { width: 220px; }
-  col.c-leg { width: 70px; }
-  col.c-turno { width: 80px; }
-  col.c-fi { width: 100px; }
-  col.c-day { width: 38px; }
-  thead th.col-name { width: 220px; min-width: 220px; max-width: 220px; }
-  thead th.col-leg { width: 80px; min-width: 80px; max-width: 80px; text-align: left; }
-  thead th.col-turno { width: 90px; min-width: 90px; max-width: 90px; text-align: left; }
-  thead th.col-fi { width: 110px; min-width: 110px; max-width: 110px; text-align: left; }
   td.name { max-width: 220px; }
   td.leg { width: 80px; }
   td.turno { width: 90px; }
@@ -83,7 +73,10 @@
   tbody tr.emp { border-bottom: 1px solid var(--border); transition: background 0.1s; }
   tbody tr.emp:hover { background: #fafaf8; }
   td { padding: 8px 12px; vertical-align: middle; }
-  td.name { font-weight: 500; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  td.name { font-weight: 500; width: 30%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  td.leg { width: 70px; }
+  td.turno { width: 90px; }
+  td.fi { width: 100px; }
   td.leg { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); }
   td.turno { color: var(--muted); white-space: nowrap; }
   td.fi { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--hint); }
@@ -104,7 +97,7 @@
 
 <div class="topbar">
   <div class="brand">Presentismo <span>/ KZero</span></div>
-  <div class="updated">Actualizado: 05/05/2026 09:37</div>
+  <div class="updated">Actualizado: 05/05/2026 09:40</div>
 </div>
 
 <div class="metrics">
@@ -123,7 +116,7 @@
 </div>
 
 <div class="table-wrap">
-  <table id="tabla"><colgroup id="colgroup"></colgroup>
+  <table id="tabla">
     <thead id="thead"></thead>
     <tbody id="tbody"></tbody>
   </table>
