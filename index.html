@@ -97,7 +97,7 @@
 
 <div class="topbar">
   <div class="brand">Presentismo <span>/ KZero</span></div>
-  <div class="updated">Actualizado: 05/05/2026 09:51</div>
+  <div class="updated">Actualizado: 05/05/2026 09:53</div>
 </div>
 
 <div class="metrics">
@@ -135,8 +135,6 @@ function parseDate(s) {
 }
 
 function buildHeader() {
-  var cg = document.getElementById("colgroup");
-  cg.innerHTML = "<col class='c-name'><col class='c-leg'><col class='c-turno'><col class='c-fi'>" + FECHAS.map(function(){ return "<col class='c-day'>"; }).join("");
   var hoy = new Date(); hoy.setHours(0,0,0,0);
   var todayStr = hoy.getFullYear() + '-' + String(hoy.getMonth()+1).padStart(2,'0') + '-' + String(hoy.getDate()).padStart(2,'0');
   var html = '<tr><th class="col-name">Empleado</th><th class="col-leg">Legajo</th><th class="col-turno">Turno</th><th class="col-fi">Ingreso</th>';
