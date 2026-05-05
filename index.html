@@ -97,7 +97,7 @@
 
 <div class="topbar">
   <div class="brand">Presentismo <span>/ KZero</span></div>
-  <div class="updated">Actualizado: 05/05/2026 10:18</div>
+  <div class="updated">Actualizado: 05/05/2026 10:24</div>
 </div>
 
 <div class="metrics">
@@ -183,13 +183,13 @@ function render() {
   });
   var sectMap = {};
   for (var i=0; i<filtered.length; i++) {
+  var sectMap = {};
+  for (var i=0; i<filtered.length; i++) {
     var sec = filtered[i].sector;
+    if (EXCLUIR.indexOf(sec) !== -1) continue;
     if (!sectMap[sec]) sectMap[sec] = [];
     sectMap[sec].push(filtered[i]);
   }
-  var sectores = Object.keys(sectMap).sort();
-
-  var html = '';
   for (var s=0; s<sectores.length; s++) {
     var sec = sectores[s];
     var filas = sectMap[sec].sort(function(a,b){ return parseInt(a.legajo) - parseInt(b.legajo); });
