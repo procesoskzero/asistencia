@@ -97,7 +97,7 @@
 
 <div class="topbar">
   <div class="brand">Presentismo <span>/ KZero</span></div>
-  <div class="updated">Actualizado: 05/05/2026 10:13</div>
+  <div class="updated">Actualizado: 05/05/2026 10:18</div>
 </div>
 
 <div class="metrics">
@@ -152,12 +152,12 @@ function buildHeader() {
   document.getElementById('thead').innerHTML = html;
 }
 
+var EXCLUIR = ["LIMPIEZA PREOPERACIONAL","ADMINISTRACION DE PRODUCCION"];
 function getSectores() {
   var s = {};
-  for (var i=0; i<ROWS.length; i++) { if (ROWS[i].sector) s[ROWS[i].sector] = 1; }
+  for (var i=0; i<ROWS.length; i++) { if (ROWS[i].sector && EXCLUIR.indexOf(ROWS[i].sector) === -1) s[ROWS[i].sector] = 1; }
   return Object.keys(s).sort();
 }
-
 function buildFilters() {
   var sel = document.getElementById('f-sector');
   var secs = getSectores();
@@ -176,11 +176,11 @@ function render() {
   var fTurno  = document.getElementById('f-turno').value;
 
   var filtered = ROWS.filter(function(r) {
-    return (!fNombre || r.nombre.toLowerCase().indexOf(fNombre) >= 0 || r.legajo.indexOf(fNombre) >= 0) &&
+    return EXCLUIR.indexOf(r.sector) === -1 &&
+           (!fNombre || r.nombre.toLowerCase().indexOf(fNombre) >= 0 || r.legajo.indexOf(fNombre) >= 0) &&
            (!fSector || r.sector === fSector) &&
            (!fTurno  || r.turno === fTurno);
   });
-
   var sectMap = {};
   for (var i=0; i<filtered.length; i++) {
     var sec = filtered[i].sector;
