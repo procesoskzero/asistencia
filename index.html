@@ -97,7 +97,7 @@
 
 <div class="topbar">
   <div class="brand">Presentismo <span>/ KZero</span></div>
-  <div class="updated">Actualizado: 05/05/2026 13:08</div>
+  <div class="updated">Actualizado: 05/05/2026 13:16</div>
 </div>
 
 <div class="metrics">
@@ -176,7 +176,7 @@ function render() {
   var fTurno  = document.getElementById('f-turno').value;
 
   var filtered = ROWS.filter(function(r) {
-    return EXCLUIR.indexOf(r.sector) === -1 && r.sector !== "" &&
+    return EXCLUIR.indexOf(r.sector) === -1 && r.sector.trim() !== "" &&
            (!fNombre || r.nombre.toLowerCase().indexOf(fNombre) >= 0 || r.legajo.indexOf(fNombre) >= 0) &&
            (!fSector || r.sector === fSector) &&
            (!fTurno  || r.turno === fTurno);
