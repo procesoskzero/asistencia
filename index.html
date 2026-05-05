@@ -54,6 +54,12 @@
   .table-wrap { padding: 0 24px 40px; overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); font-size: 13px; }
   
+  table { table-layout: fixed; }
+  col.c-name { width: 220px; }
+  col.c-leg { width: 70px; }
+  col.c-turno { width: 80px; }
+  col.c-fi { width: 100px; }
+  col.c-day { width: 38px; }
   thead th {
     background: #f0ede8; font-weight: 500; font-size: 11px;
     text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted);
@@ -90,7 +96,7 @@
 
 <div class="topbar">
   <div class="brand">Presentismo <span>/ KZero</span></div>
-  <div class="updated">Actualizado: 05/05/2026 09:27</div>
+  <div class="updated">Actualizado: 05/05/2026 09:35</div>
 </div>
 
 <div class="metrics">
@@ -109,7 +115,7 @@
 </div>
 
 <div class="table-wrap">
-  <table id="tabla">
+  <table id="tabla"><colgroup id="colgroup"></colgroup>
     <thead id="thead"></thead>
     <tbody id="tbody"></tbody>
   </table>
@@ -128,6 +134,8 @@ function parseDate(s) {
 }
 
 function buildHeader() {
+  var cg = document.getElementById("colgroup");
+  cg.innerHTML = "<col class='c-name'><col class='c-leg'><col class='c-turno'><col class='c-fi'>" + FECHAS.map(function(){ return "<col class='c-day'>"; }).join("");
   var hoy = new Date(); hoy.setHours(0,0,0,0);
   var todayStr = hoy.getFullYear() + '-' + String(hoy.getMonth()+1).padStart(2,'0') + '-' + String(hoy.getDate()).padStart(2,'0');
   var html = '<tr><th>Empleado</th><th>Legajo</th><th>Turno</th><th>Ingreso</th>';
@@ -185,7 +193,7 @@ function render() {
   var html = '';
   for (var s=0; s<sectores.length; s++) {
     var sec = sectores[s];
-    var filas = sectMap[sec].sort(function(a,b){ return a.nombre.localeCompare(b.nombre); });
+    var filas = sectMap[sec].sort(function(a,b){ return parseInt(a.legajo) - parseInt(b.legajo); });
     html += '<tr class="sector-row"><td colspan="' + (4 + FECHAS.length) + '">' + sec + '<span class="sector-count">' + filas.length + ' personas</span></td></tr>';
     for (var r=0; r<filas.length; r++) {
       var row = filas[r];
