@@ -97,7 +97,7 @@
 
 <div class="topbar">
   <div class="brand">Presentismo <span>/ KZero</span></div>
-  <div class="updated">Actualizado: 05/05/2026 12:38</div>
+  <div class="updated">Actualizado: 05/05/2026 12:43</div>
 </div>
 
 <div class="metrics">
@@ -203,7 +203,6 @@ function render() {
       html += '<td class="fi">' + (row.fi || '-') + '</td>';
       for (var f=0; f<FECHAS.length; f++) {
         var fecha = FECHAS[f];
-        if (fecha in row.aus) {
         if (fecha in row.aus) {
           html += '<td class="day-cell"><span class="dot-aus">&#10007;</span></td>';
         } else {
