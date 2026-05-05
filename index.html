@@ -97,7 +97,7 @@
 
 <div class="topbar">
   <div class="brand">Presentismo <span>/ KZero</span></div>
-  <div class="updated">Actualizado: 05/05/2026 09:55</div>
+  <div class="updated">Actualizado: 05/05/2026 09:59</div>
 </div>
 
 <div class="metrics">
@@ -207,7 +207,7 @@ function render() {
           var gest = row.aus[fecha];
           html += '<td class="day-cell">' + (gest ? '<span class="dot-gest">&#10003;</span>' : '<span class="dot-aus">&#10007;</span>') + '</td>';
         } else {
-          html += '<td class="day-cell"><span class="dot-ok">&middot;</span></td>';
+          html += '<td class="day-cell"><span class="dot-gest">&#10003;</span></td>';
         }
       }
       html += '</tr>';
