@@ -97,7 +97,7 @@
 
 <div class="topbar">
   <div class="brand">Presentismo <span>/ KZero</span></div>
-  <div class="updated">Actualizado: 05/05/2026 14:04</div>
+  <div class="updated">Actualizado: 05/05/2026 14:10</div>
 </div>
 
 <div class="metrics">
@@ -140,7 +140,7 @@ function buildHeader() {
   var todayStr = hoy.getFullYear() + '-' + String(hoy.getMonth()+1).padStart(2,'0') + '-' + String(hoy.getDate()).padStart(2,'0');
   var html = '<tr><th class="col-name">Empleado</th><th class="col-leg">Legajo</th><th class="col-turno">Turno</th><th class="col-fi">Ingreso</th>';
   for (var i=0; i<FECHAS.length; i++) {
-    var f = FECHAS[i];
+    var f = FECHAS_VISIBLES[i];
     var d = parseDate(f);
     var dow = d.getDay();
     var isWeekend = dow === 0 || dow === 6;
@@ -178,8 +178,7 @@ function render() {
   var fMes    = document.getElementById('f-mes').value;
 
   var filtered = ROWS.filter(function(r) {
-    var tieneEnMes = !fMes || Object.keys(r.aus).some(function(d){ return d.substring(0,7) === fMes; });
-    return EXCLUIR.indexOf(r.sector) === -1 && r.sector.trim() !== "" && tieneEnMes &&
+    return EXCLUIR.indexOf(r.sector) === -1 && r.sector.trim() !== "" &&
            (!fNombre || r.nombre.toLowerCase().indexOf(fNombre) >= 0 || r.legajo.indexOf(fNombre) >= 0) &&
            (!fSector || r.sector === fSector) &&
            (!fTurno  || r.turno === fTurno);
@@ -251,7 +250,7 @@ render();
 document.getElementById('f-nombre').addEventListener('input', render);
 document.getElementById('f-sector').addEventListener('change', render);
 document.getElementById('f-turno').addEventListener('change', render);
-document.getElementById('f-mes').addEventListener('change', render);
+document.getElementById('f-mes').addEventListener('change', function(){ actualizarFechasVisibles(); buildHeader(); render(); });
 </script>
 </body>
 </html>
