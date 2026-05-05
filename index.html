@@ -15,26 +15,25 @@
     --topbar-h: 56px; --metrics-h: 82px; --filters-h: 50px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; }
-  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; display: flex; flex-direction: column; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; }
   .topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 24px; height: var(--topbar-h); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
   .brand { font-size: 15px; font-weight: 600; letter-spacing: -0.3px; }
   .brand span { color: var(--muted); font-weight: 400; }
   .updated { font-size: 12px; color: var(--hint); font-family: 'DM Mono', monospace; }
-  .metrics { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; padding: 10px 24px; background: var(--bg); flex-shrink: 0; }
+  .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; padding: 10px 24px; }
   .metric { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 14px; }
   .metric-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px; }
   .metric-value { font-size: 22px; font-weight: 600; letter-spacing: -1px; line-height: 1; }
   .metric-value.g { color: var(--green); } .metric-value.r { color: var(--red); } .metric-value.b { color: var(--blue); }
-  .filters { display: flex; gap: 8px; padding: 8px 24px; flex-wrap: nowrap; align-items: center; background: var(--bg); flex-shrink: 0; border-bottom: 1px solid var(--border); overflow-x: auto; }
+  .filters { display: flex; gap: 8px; padding: 8px 24px; flex-wrap: wrap; align-items: center; border-bottom: 1px solid var(--border); overflow-x: auto; }
   .filters select, .filters input { font-family: 'DM Sans', sans-serif; font-size: 13px; border: 1px solid var(--border-md); border-radius: 8px; padding: 5px 10px; background: var(--surface); color: var(--text); outline: none; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
-  .filters input[type="text"] { width: 160px; }
+  .filters input[type="text"] { width: 140px; }
   .filters input[type="date"] { width: 130px; }
   .filter-label { font-size: 12px; color: var(--muted); white-space: nowrap; flex-shrink: 0; }
   .filter-sep { font-size: 12px; color: var(--hint); flex-shrink: 0; }
-  .table-outer { flex: 1; overflow: auto; padding: 0 24px 24px; }
+  .table-outer { padding: 0 24px 40px; overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; background: var(--surface); font-size: 13px; border: 1px solid var(--border); border-radius: var(--radius); }
-  thead th { background: #f0ede8; font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); padding: 10px 12px; white-space: nowrap; border-bottom: 1px solid var(--border-md); position: sticky; top: 0; z-index: 10; }
+  thead th { background: #f0ede8; font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); padding: 10px 12px; white-space: nowrap; border-bottom: 1px solid var(--border-md); }
   thead th.col-name { width: 25%; text-align: left; } thead th.col-leg { width: 80px; text-align: left; }
   thead th.col-turno { width: 100px; text-align: left; } thead th.col-fi { width: 110px; text-align: left; }
   thead th.day { text-align: center; width: 36px; padding: 10px 4px; }
@@ -69,7 +68,7 @@
 <body>
 <div class="topbar">
   <div class="brand">Presentismo <span>/ KZero</span></div>
-  <div class="updated">Actualizado: 05/05/2026 18:12</div>
+  <div class="updated">Actualizado: 05/05/2026 18:14</div>
 </div>
 <div class="metrics">
   <div class="metric"><div class="metric-label">Dotaci&oacute;n</div><div class="metric-value b" id="m-dot">-</div></div>
