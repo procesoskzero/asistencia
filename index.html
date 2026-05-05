@@ -97,7 +97,7 @@
 
 <div class="topbar">
   <div class="brand">Presentismo <span>/ KZero</span></div>
-  <div class="updated">Actualizado: 05/05/2026 14:25</div>
+  <div class="updated">Actualizado: 05/05/2026 14:28</div>
 </div>
 
 <div class="metrics">
@@ -134,10 +134,10 @@ function actualizarFechasVisibles() {
   FECHAS_VISIBLES = fMes ? FECHAS.filter(function(f){ return f.substring(0,7) === fMes; }) : FECHAS;
 }
 
+
 var DIAS_ES = ['Dom','Lun','Mar','Mie','Jue','Vie','Sab'];
+function parseDate(s) { var p = s.split('-'); return new Date(parseInt(p[0]), parseInt(p[1])-1, parseInt(p[2])); }
 function buildHeader() {
-  var html = '<tr><th class="col-name">Empleado</th><th class="col-leg">Legajo</th><th class="col-turno">Turno</th><th class="col-fi">Ingreso</th>';
-  for (var i=0; i<FECHAS_VISIBLES.length; i++) {
     var f = FECHAS_VISIBLES[i];
     var d = parseDate(f);
     var dow = d.getDay();
