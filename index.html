@@ -103,12 +103,17 @@
   .badge-maq.ev { background:var(--green-bg); color:var(--green); }
   .badge-maq.co { background:var(--amber-bg); color:var(--amber); }
   .badge-maq.ca { background:var(--blue-bg); color:var(--blue); }
+  .fich-pager { display:flex; align-items:center; justify-content:space-between; padding:10px 24px 24px; font-size:13px; color:var(--muted); }
+  .fich-pager-btns { display:flex; gap:6px; }
+  .fich-pager-btn { font-family:'DM Sans',sans-serif; font-size:12px; padding:5px 12px; border:1px solid var(--border-md); border-radius:7px; background:var(--surface); color:var(--text); cursor:pointer; }
+  .fich-pager-btn:disabled { opacity:0.35; cursor:default; }
+  .fich-pager-btn.active { background:var(--blue); color:#fff; border-color:var(--blue); }
 </style>
 </head>
 <body>
 <div class="topbar">
   <div class="brand">Presentismo <span>/ KZero</span></div>
-  <div class="updated">Actualizado: 08/05/2026 16:04</div>
+  <div class="updated">Actualizado: 08/05/2026 16:07</div>
 </div>
 <div class="metrics">
   <div class="metric"><div class="metric-label">Dotaci&oacute;n</div><div class="metric-value b" id="m-dot">-</div></div>
@@ -160,9 +165,13 @@
 </div>
 <div class="fich-outer">
   <table class="fich-table"><thead><tr>
-    <th>Empleado</th><th>Legajo</th><th>Fecha</th><th>Hora</th><th>M&aacute;quina</th>
+    <th>Empleado</th><th>Legajo</th><th>Fecha</th><th>Entrada</th><th>Salida</th><th>M&aacute;quina</th>
   </tr></thead><tbody id="fich-tbody"></tbody></table>
   <div id="fich-no-data" style="display:none;text-align:center;padding:48px;color:var(--hint);font-size:13px">Sin resultados.</div>
+</div>
+<div class="fich-pager" id="fich-pager" style="display:none">
+  <span id="fich-pager-info"></span>
+  <div class="fich-pager-btns" id="fich-pager-btns"></div>
 </div>
 </div>
 <div class="login-overlay" id="login-overlay">
@@ -392,42 +401,105 @@ function inicializarFiltrosFichajes() {
   document.getElementById("ff-hasta").value = dateToStr(hoy);
 }
 
-function renderFichajes() {
+var FICH_PAGE = 0;
+var FICH_PAGE_SIZE = 100;
+var FICH_FILTERED = [];
+
+function renderFichajes(resetPage) {
+  if (resetPage === undefined || resetPage) FICH_PAGE = 0;
   var fNombre = document.getElementById("ff-nombre").value.toLowerCase();
   var fMaq    = document.getElementById("ff-maquina").value;
   var fDesde  = document.getElementById("ff-desde").value;
   var fHasta  = document.getElementById("ff-hasta").value;
 
-  var filtered = FICHAJES.filter(function(f) {
+  FICH_FILTERED = FICHAJES.filter(function(f) {
     var fechaSolo = f.dt.substring(0,10);
     return (!fNombre || f.nombre.toLowerCase().indexOf(fNombre) >= 0 || f.legajo.indexOf(fNombre) >= 0) &&
            (!fMaq    || f.maquina === fMaq) &&
            (!fDesde  || fechaSolo >= fDesde) &&
            (!fHasta  || fechaSolo <= fHasta);
   });
+  FICH_FILTERED.sort(function(a,b){ return b.dt.localeCompare(a.dt); });
 
-  filtered.sort(function(a,b){ return b.dt.localeCompare(a.dt); });
+  // Agrupar por legajo+fecha: una fila con entrada y salida
+  var grupos = {};
+  var gruposOrder = [];
+  for (var i=0; i<FICH_FILTERED.length; i++) {
+    var f = FICH_FILTERED[i];
+    var key = f.legajo + "|" + f.dt.substring(0,10);
+    if (!grupos[key]) {
+      grupos[key] = { legajo:f.legajo, nombre:f.nombre, fecha:f.dt.substring(0,10), maquina:f.maquina, marcas:[] };
+      gruposOrder.push(key);
+    }
+    grupos[key].marcas.push(f.dt.substring(11,16));
+  }
+  // Ordenar marcas de cada grupo y reconstruir array plano
+  var agrupado = gruposOrder.map(function(k) {
+    var g = grupos[k];
+    g.marcas.sort();
+    g.entrada = g.marcas[0];
+    g.salida  = g.marcas.length > 1 ? g.marcas[g.marcas.length-1] : "";
+    return g;
+  });
+  FICH_FILTERED = agrupado;
+
+  renderFichajesPagina();
+}
+
+function renderFichajesPagina() {
+  var totalPages = Math.ceil(FICH_FILTERED.length / FICH_PAGE_SIZE);
+  var start = FICH_PAGE * FICH_PAGE_SIZE;
+  var end   = Math.min(start + FICH_PAGE_SIZE, FICH_FILTERED.length);
+  var pagina = FICH_FILTERED.slice(start, end);
 
   var maqClass = { "EVISCERACION":"ev", "CORTES":"co", "CAMARA":"ca" };
   var html = "";
-  for (var i=0; i<filtered.length; i++) {
-    var f = filtered[i];
-    var fechaStr = f.dt.substring(0,10);
-    var horaStr  = f.dt.substring(11,16);
+  for (var i=0; i<pagina.length; i++) {
+    var f = pagina[i];
     var cls = maqClass[f.maquina] || "";
+    var salidaHtml = f.salida ? f.salida : '<span style="color:var(--hint)">—</span>';
     html += "<tr>";
     html += "<td class=\"name\">" + f.nombre + "</td>";
     html += "<td class=\"f-leg\">" + f.legajo + "</td>";
-    html += "<td class=\"f-fecha\">" + fechaStr + "</td>";
-    html += "<td class=\"f-hora\">" + horaStr + "</td>";
+    html += "<td class=\"f-fecha\">" + f.fecha + "</td>";
+    html += "<td class=\"f-hora\">" + f.entrada + "</td>";
+    html += "<td class=\"f-hora\">" + salidaHtml + "</td>";
     html += "<td class=\"f-maq\"><span class=\"badge-maq " + cls + "\">" + f.maquina + "</span></td>";
     html += "</tr>";
   }
 
-  var tbody = document.getElementById("fich-tbody");
+  var tbody  = document.getElementById("fich-tbody");
   var noData = document.getElementById("fich-no-data");
-  if (filtered.length === 0) { tbody.innerHTML = ""; noData.style.display = "block"; }
-  else { tbody.innerHTML = html; noData.style.display = "none"; }
+  var pager  = document.getElementById("fich-pager");
+  var info   = document.getElementById("fich-pager-info");
+  var btns   = document.getElementById("fich-pager-btns");
+
+  if (FICH_FILTERED.length === 0) {
+    tbody.innerHTML = ""; noData.style.display = "block"; pager.style.display = "none";
+    return;
+  }
+  noData.style.display = "none";
+  tbody.innerHTML = html;
+
+  // Paginador
+  info.textContent = (start+1) + "-" + end + " de " + FICH_FILTERED.length + " registros";
+  var bHtml = "";
+  bHtml += "<button class=\"fich-pager-btn\" onclick=\"fichPage(" + (FICH_PAGE-1) + ")\" " + (FICH_PAGE===0?"disabled":"") + ">&#8592; Ant</button>";
+  var maxBtns = 5;
+  var startP = Math.max(0, FICH_PAGE - 2);
+  var endP   = Math.min(totalPages, startP + maxBtns);
+  for (var p=startP; p<endP; p++) {
+    bHtml += "<button class=\"fich-pager-btn" + (p===FICH_PAGE?" active":"") + "\" onclick=\"fichPage(" + p + ")\">" + (p+1) + "</button>";
+  }
+  bHtml += "<button class=\"fich-pager-btn\" onclick=\"fichPage(" + (FICH_PAGE+1) + ")\" " + (FICH_PAGE>=totalPages-1?"disabled":"") + ">Sig &#8594;</button>";
+  btns.innerHTML = bHtml;
+  pager.style.display = "flex";
+}
+
+function fichPage(p) {
+  FICH_PAGE = p;
+  renderFichajesPagina();
+  document.getElementById("tab-marcaciones").scrollIntoView({behavior:"smooth",block:"start"});
 }
 
 inicializarFiltrosFichajes();
